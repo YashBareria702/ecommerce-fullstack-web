@@ -2,5 +2,12 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "quality-corner",
   "pages_build_output_dir": "./dist",
-  "compatibility_date": "2026-09-26"
+  "compatibility_date": "2026-09-26",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "quality-corner-db",
+      "database_id": "009e537e-5e08-487d-ba44-813d499573ef"
+    }
+  ]
 }
