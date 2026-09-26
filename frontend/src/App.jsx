@@ -53,7 +53,7 @@ function App() {
     event.preventDefault()
     try {
       const registering = authMode === 'register'
-      const response = await fetch(`http://localhost:5000/api/${registering ? 'register' : 'login'}`, {
+      const response = await fetch(`/api/${registering ? 'register' : 'login'}`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: authUsername.trim(), name: authName.trim() || authUsername.trim(), password: authPassword }),
       })
@@ -71,7 +71,7 @@ function App() {
     if (!customerForm.name.trim() || !customerForm.phone.trim() || !customerForm.address.trim()) return
     const order = { id: `QC-${Date.now().toString().slice(-7)}`, createdAt: new Date().toISOString(), username: customer.username, phone: customerForm.phone.trim(), customerName: customerForm.name.trim(), address: customerForm.address.trim(), items: cart, total, status: 'Order received' }
     const next = [order, ...orders]
-    fetch('http://localhost:5000/api/orders/notify', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${customerToken}` }, body: JSON.stringify({ orderId: order.id, customerName: order.customerName, customerMobile: order.phone, total: order.total }) })
+    fetch('/api/orders/notify', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${customerToken}` }, body: JSON.stringify({ orderId: order.id, customerName: order.customerName, customerMobile: order.phone, total: order.total }) })
       .then(async response => { const data = await response.json(); if (!response.ok) throw new Error(data.message || 'SMS could not be sent.'); return data })
       .then(() => flash('Order placed! SMS sent to you and the shop owner.'))
       .catch(error => flash(`Order placed, but SMS was not sent: ${error.message}`))
@@ -86,7 +86,7 @@ function App() {
   const ownerLogin = async event => {
     event.preventDefault(); setOwnerError('')
     try {
-      const response = await fetch('http://localhost:5000/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: ownerPassword }) })
+      const response = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: ownerPassword }) })
       const data = await response.json()
       if (!response.ok) throw new Error(data.message || 'Owner sign-in failed.')
       setOwnerToken(data.token); sessionStorage.setItem('qc-owner-token', data.token); setOwnerLoginOpen(false); setOwnerPassword(''); flash('Owner tools unlocked for this browser session.')
